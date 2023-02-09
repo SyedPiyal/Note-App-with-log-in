@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/pagebkg"
+    android:background="@color/back"
     tools:context=".Signup">
 
 
@@ -76,6 +76,7 @@
                 android:text="Login"
                 android:textSize="18sp"
                 app:cornerRadius="20dp" />
+
 
             <TextView
                 android:id="@+id/tvRegister"

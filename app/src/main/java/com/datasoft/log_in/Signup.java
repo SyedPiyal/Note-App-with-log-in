@@ -3,6 +3,7 @@ package com.datasoft.log_in;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,9 @@ public class Signup extends AppCompatActivity {
     TextView logIn;
     Button register;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,9 @@ public class Signup extends AppCompatActivity {
         name = findViewById(R.id.et_userName);
         logIn = findViewById(R.id.tvGotoLogin);
         register = findViewById(R.id.btnReg);
+
+
+
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +57,7 @@ public class Signup extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+
                                     finish();
                                     startActivity(new Intent(Signup.this, Login.class));
                                     Toast.makeText(getApplicationContext(), "User Register", Toast.LENGTH_SHORT).show();
@@ -58,7 +66,8 @@ public class Signup extends AppCompatActivity {
 
                         }
                     }).start();
-                }else {
+                }
+                else {
                     Toast.makeText(getApplicationContext(), "fill all fields", Toast.LENGTH_SHORT).show();
                 }
             }

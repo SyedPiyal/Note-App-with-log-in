@@ -3,6 +3,7 @@ package com.datasoft.log_in;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,29 +17,46 @@ import com.datasoft.log_in.Models.Users;
 
 public class Login extends AppCompatActivity {
 
-    EditText userId, password;
-    TextView signup;
-    Button login;
+    EditText LoguserId, Logpassword;
+    TextView Logsignup;
+    Button Loglogin;
+    Intent intent;
+
+    SharedPreferences sharedPreferences;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        userId = findViewById(R.id.etLogId);
-        password = findViewById(R.id.etLoginPassword);
-        login = findViewById(R.id.btnLogin);
-        signup = findViewById(R.id.tvRegister);
+        LoguserId = findViewById(R.id.etLogId);
+        Logpassword = findViewById(R.id.etLoginPassword);
+        Loglogin = findViewById(R.id.btnLogin);
+        Logsignup = findViewById(R.id.tvRegister);
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
+
+
+
+        Loglogin.setOnClickListener(new View.OnClickListener() {
+            @Override //Log
             public void onClick(View v) {
 
-                String userIdText = userId.getText().toString();
-                String passwordText = password.getText().toString();
+                SharedPreferences sharedPreferences = getSharedPreferences("login",MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("flag",true);
+                editor.apply();
+
+                Intent intent =  new Intent(Login.this,Dashboard.class);
+                startActivity(intent);
+
+                String userIdText = LoguserId.getText().toString();
+                String passwordText = Logpassword.getText().toString();
                 if (userIdText.isEmpty() || passwordText.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Fill all Fields", Toast.LENGTH_SHORT).show();
-                }else {
+                }
+                else {
                     //perform query
                     RoomDB userDatabse = RoomDB.getInstance(getApplicationContext());
                     DAO dao = userDatabse.dao();
@@ -56,7 +74,6 @@ public class Login extends AppCompatActivity {
                                 });
                             }
                             else {
-
                                 startActivity(new Intent(Login.this, Dashboard.class));
                             }
                         }
@@ -65,7 +82,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        signup.setOnClickListener(new View.OnClickListener() {
+        Logsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Login.this, Signup.class));
