@@ -19,18 +19,27 @@ public interface DAO {
     @Insert
     void registerUser(Users users);
 
-    @Insert(onConflict = REPLACE)
-    void insert(Notes notes);
+
 
     @Query("SELECT * from users where userId =(:userId) and  password =(:password)")
     Users login(String userId, String password);
 
+   //forgetPass
+
+
+
+
 
     //notes
 
+    @Insert(onConflict = REPLACE)
+    void insert(Notes notes);
 
     @Query("SELECT * FROM notes ORDER BY id DESC")
     List<Notes> getAll();
+
+    @Query("SELECT * FROM notes WHERE UserId=(:UserId)")
+    List<Notes> getAllNotes(String UserId);
 
     @Query("UPDATE notes SET tittle =:tittle, notes=:notes WHERE ID= :id")
     void  update(int id,String tittle,String notes);

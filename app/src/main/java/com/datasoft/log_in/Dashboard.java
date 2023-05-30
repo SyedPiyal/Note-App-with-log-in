@@ -45,15 +45,18 @@ public class Dashboard extends AppCompatActivity implements PopupMenu.OnMenuItem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        SharedPreferences prefs = getSharedPreferences("MyPreference", MODE_PRIVATE);
+        String name = prefs.getString("name", "Blank Name"); //"Blank Name" the default value.
+        String idName = prefs.getString("id", "Blank Id");
+
         recyclerView = findViewById(R.id.RV_recycle);
         fab_btn = findViewById(R.id.FB_floting);
         searchView = findViewById(R.id.sv_search);
         LogOutButton = findViewById(R.id.btnLogOut);
         database = RoomDB.getInstance(this);
-        notes = database.dao().getAll();
+        notes = database.dao().getAllNotes(name);
         updateRecycler(notes);
 
-        SharedPreferences sharedPreferences  = getSharedPreferences("user_info", MODE_PRIVATE);
 
 
         fab_btn.setOnClickListener(new View.OnClickListener() {
@@ -81,9 +84,9 @@ public class Dashboard extends AppCompatActivity implements PopupMenu.OnMenuItem
             @Override
             public void onClick(View v) {
 
-                SharedPreferences sharedPreferences = getSharedPreferences("login",MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("flag",false);
+                SharedPreferences prefs = getSharedPreferences("MyPreference", MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.clear();
                 editor.apply();
 
                 Intent intent =  new Intent(Dashboard.this,Login.class);
@@ -116,19 +119,25 @@ public class Dashboard extends AppCompatActivity implements PopupMenu.OnMenuItem
         super.onActivityResult(requestCode,resultCode, data);
         if (requestCode==101){
             if (resultCode== Activity.RESULT_OK){
+                SharedPreferences prefs = getSharedPreferences("MyPreference", MODE_PRIVATE);
+                String name = prefs.getString("name", "Blank Name"); //"Blank Name" the default value.
+                String idName = prefs.getString("id", "Blank Id");
                 Notes new_notes= (Notes)  data.getSerializableExtra("note");
                 database.dao().insert(new_notes);
                 notes.clear();
-                notes.addAll(database.dao().getAll());
+                notes.addAll(database.dao().getAllNotes(name));
                 notesListAdapter.notifyDataSetChanged();
             }
         }
         else if (requestCode==102){
             if (resultCode==Activity.RESULT_OK){
+                SharedPreferences prefs = getSharedPreferences("MyPreference", MODE_PRIVATE);
+                String name = prefs.getString("name", "Blank Name"); //"Blank Name" the default value.
+                String idName = prefs.getString("id", "Blank Id");
                 Notes new_notes= (Notes) data.getSerializableExtra("note");
                 database.dao().update(new_notes.getID(),new_notes.getTittle(),new_notes.getNotes());
                 notes.clear();
-                notes.addAll(database.dao().getAll());
+                notes.addAll(database.dao().getAllNotes(name));
                 notesListAdapter.notifyDataSetChanged();
             }
         }

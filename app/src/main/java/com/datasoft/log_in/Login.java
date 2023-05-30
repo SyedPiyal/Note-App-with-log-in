@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,11 +19,11 @@ import com.datasoft.log_in.Models.Users;
 public class Login extends AppCompatActivity {
 
     EditText LoguserId, Logpassword;
-    TextView Logsignup;
+    TextView Logsignup,Forget_pass;
     Button Loglogin;
-    Intent intent;
 
-    SharedPreferences sharedPreferences;
+
+
 
 
 
@@ -35,6 +36,7 @@ public class Login extends AppCompatActivity {
         Logpassword = findViewById(R.id.etLoginPassword);
         Loglogin = findViewById(R.id.btnLogin);
         Logsignup = findViewById(R.id.tvRegister);
+        Forget_pass = findViewById(R.id.tvForgotpass);
 
 
 
@@ -42,14 +44,6 @@ public class Login extends AppCompatActivity {
         Loglogin.setOnClickListener(new View.OnClickListener() {
             @Override //Log
             public void onClick(View v) {
-
-                SharedPreferences sharedPreferences = getSharedPreferences("login",MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("flag",true);
-                editor.apply();
-
-                Intent intent =  new Intent(Login.this,Dashboard.class);
-                startActivity(intent);
 
                 String userIdText = LoguserId.getText().toString();
                 String passwordText = Logpassword.getText().toString();
@@ -65,6 +59,7 @@ public class Login extends AppCompatActivity {
                         public void run() {
 
                             Users users = dao.login(userIdText,passwordText);
+                           // Log.d("user",users.getUserId());
                             if (users == null){
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -74,6 +69,19 @@ public class Login extends AppCompatActivity {
                                 });
                             }
                             else {
+                                /*SharedPreferences sharedPreferences = getSharedPreferences("login",MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("userId",users.getUserId());
+                                editor.putBoolean("userPass",true);
+                                editor.commit();*/
+
+                                SharedPreferences.Editor editor = getSharedPreferences("MyPreference", MODE_PRIVATE).edit();
+                                editor.putString("name", users.getUserId());
+                                editor.putString("id", users.getPassword());
+                                editor.apply();
+
+                                /*Intent intent =  new Intent(Login.this,Dashboard.class);
+                                startActivity(intent);*/
                                 startActivity(new Intent(Login.this, Dashboard.class));
                             }
                         }
@@ -86,6 +94,14 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Login.this, Signup.class));
+            }
+        });
+
+        Forget_pass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),ForgetPass.class);
+                startActivity(intent);
             }
         });
     }

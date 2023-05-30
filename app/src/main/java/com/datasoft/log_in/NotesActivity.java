@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,7 +34,9 @@ public class NotesActivity extends AppCompatActivity {
         editText_tittle=findViewById(R.id.ed_tittle);
         editText_notes=findViewById(R.id.ed_add_notes);
         is_old_note=true;
-
+        SharedPreferences prefs = getSharedPreferences("MyPreference", MODE_PRIVATE);
+        String name = prefs.getString("name", "Blank Name"); //"Blank Name" the default value.
+        String idName = prefs.getString("id", "Blank Id");
         notes=new Notes();
         try {
             notes= (Notes) getIntent().getSerializableExtra("old_note");
@@ -59,7 +63,10 @@ public class NotesActivity extends AppCompatActivity {
                     notes= new Notes();
                 }
 
+
+                Log.v("id",name);
                 notes.setTittle(tittle);
+                notes.setUserId(name);
                 notes.setNotes(description);
                 notes.setDate(format.format(date));
 
@@ -70,4 +77,7 @@ public class NotesActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 }

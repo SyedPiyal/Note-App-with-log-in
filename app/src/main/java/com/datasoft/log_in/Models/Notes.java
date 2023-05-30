@@ -12,6 +12,9 @@ public class Notes implements Serializable {
     @PrimaryKey(autoGenerate = true)
     int ID=0;
 
+    @ColumnInfo(name = "UserId")
+    String UserId="";
+
     @ColumnInfo(name = "tittle")
     String tittle="";
 
@@ -23,6 +26,14 @@ public class Notes implements Serializable {
 
     @ColumnInfo(name = "pinned")
     boolean pinned = false;
+
+    public String getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(String userId) {
+        UserId = userId;
+    }
 
     public int getID() {
         return ID;
